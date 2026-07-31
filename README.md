@@ -22,10 +22,11 @@ pnpm test
 | Command            | Description                        |
 | ------------------ | ---------------------------------- |
 | `pnpm build`       | Build all packages                 |
-| `pnpm test`        | Run tests across the monorepo      |
+| `pnpm test`        | Run tests with coverage (≥90% required) |
 | `pnpm lint`        | Lint all packages                  |
 | `pnpm check-types` | Type-check all packages            |
 | `pnpm dev`         | Start dev watchers (where defined) |
+| `pnpm mcp-config --cursor` / `--claude` / `--copilot` | Print paste-ready MCP client JSON |
 
 ## Packages
 
@@ -42,6 +43,7 @@ MCP server packages use the `mcp-*` prefix in both folder and package name.
 
 See the [documentation hub](./docs/README.md) for package implementation guides and conventions.
 
+- [Using MCP servers in Cursor, VS Code, and Claude](./USING-MCP.md) (includes `pnpm mcp-config`)
 - [Versioning and Git workflow](./docs/versioning.md)
 
 ## License

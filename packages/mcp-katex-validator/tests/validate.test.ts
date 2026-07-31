@@ -1,7 +1,12 @@
-import { describe, expect, it } from "vitest";
+import katex from "katex";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateKatex } from "../src/validate.js";
 
 describe("validateKatex", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("accepts a simple valid expression", () => {
     expect(validateKatex("x^2 + y^2 = z^2")).toEqual({
       valid: true,
@@ -34,5 +39,17 @@ describe("validateKatex", () => {
 
   it("accepts an empty expression", () => {
     expect(validateKatex("")).toEqual({ valid: true, expression: "" });
+  });
+
+  it("stringifies non-Error throw values", () => {
+    vi.spyOn(katex, "renderToString").mockImplementation(() => {
+      throw "boom";
+    });
+
+    expect(validateKatex("x")).toEqual({
+      valid: false,
+      expression: "x",
+      error: "boom",
+    });
   });
 });

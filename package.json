@@ -12,7 +12,9 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && pnpm tag-releases && git push --tags",
-    "tag-releases": "node scripts/tag-releases.mjs"
+    "tag-releases": "node scripts/tag-releases.mjs",
+    "mcp-config": "node scripts/mcp-config.mjs",
+    "test:mcp-config": "node --test tests/mcp-config.test.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1",

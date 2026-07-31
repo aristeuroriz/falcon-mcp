@@ -15,6 +15,7 @@ For setup and workspace scripts, start with the [root README](../README.md).
 
 | Topic | Document |
 |-------|----------|
+| Using MCP servers (Cursor, VS Code, Claude) | [USING-MCP.md](../USING-MCP.md) |
 | Versioning and Git workflow | [versioning](./versioning.md) |
 
 ## Conventions
