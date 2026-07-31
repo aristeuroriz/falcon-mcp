@@ -1,5 +1,11 @@
 # @aristeuroriz/mcp-katex-validator
 
+## 3.0.1
+
+### Patch Changes
+
+- c34242f: Rename package to `@aristeuroriz/mcp-katex-validator` and enable public npm publishing via GitHub Actions Trusted Publishing.
+
 ## 3.0.0
 
 ### Major Changes
