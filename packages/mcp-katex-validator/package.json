@@ -10,7 +10,8 @@
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./validate": "./dist/validate.js"
+    "./validate": "./dist/validate.js",
+    "./schemas": "./dist/schemas.js"
   },
   "files": [
     "dist"

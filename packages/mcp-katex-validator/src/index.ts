@@ -1,30 +1,39 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import { validateKatex } from "./validate.js";
+import {
+  validateKatexBatchResultSchema,
+  validateKatexInputSchema,
+} from "./schemas.js";
+import { validateKatexBatch } from "./validate.js";
 
-const server = new McpServer({ name: "mcp-katex-validator", version: "1.0.0" });
+const server = new McpServer({
+  name: "mcp-katex-validator",
+  title: "MCP KaTeX Validator",
+  version: "3.0.0",
+  description:
+    "Validate KaTeX/LaTeX expression syntax in batch and return a structured result",
+});
 
 server.registerTool(
   "validate_katex",
   {
     description:
-      "Validate KaTeX/LaTeX expression syntax and return a structured result",
-    inputSchema: {
-      expression: z.string().describe("LaTeX formula to validate"),
-    },
+      "Validate one or more KaTeX/LaTeX expressions in a single call. Returns a summary and only the failed expressions (with 0-based index and error message).",
+    inputSchema: validateKatexInputSchema,
+    outputSchema: validateKatexBatchResultSchema,
   },
-  async ({ expression }) => {
-    const result = validateKatex(expression);
+  async ({ expressions }) => {
+    const result = validateKatexBatch(expressions);
     return {
-      isError: !result.valid,
+      isError: !result.allValid,
       content: [
         {
           type: "text",
           text: JSON.stringify(result),
         },
       ],
+      structuredContent: result,
     };
   },
 );
