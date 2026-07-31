@@ -26,7 +26,7 @@ pnpm test
 | `pnpm lint`        | Lint all packages                  |
 | `pnpm check-types` | Type-check all packages            |
 | `pnpm dev`         | Start dev watchers (where defined) |
-| `pnpm mcp-config --cursor` / `--claude` / `--copilot` | Print paste-ready MCP client JSON |
+| `pnpm mcp-config --cursor` / `--claude` / `--copilot` | Print paste-ready MCP JSON (npm/`npx` by default; add `--dev` for local) |
 
 ## Packages
 

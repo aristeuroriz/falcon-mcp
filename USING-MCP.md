@@ -34,9 +34,10 @@ See [docs/packages/mcp-katex-validator.md](./docs/packages/mcp-katex-validator.m
 From the repository root, print a ready-to-paste config for your client. The script discovers every `packages/mcp-*` server and fills in absolute paths:
 
 ```sh
-pnpm mcp-config --cursor    # Cursor (.cursor/mcp.json)
-pnpm mcp-config --claude    # Claude Desktop / Claude Code
-pnpm mcp-config --copilot   # VS Code GitHub Copilot (.vscode/mcp.json)
+pnpm mcp-config --cursor          # npm (npx) — published package
+pnpm mcp-config --cursor --dev    # local dist (absolute path)
+pnpm mcp-config --claude
+pnpm mcp-config --copilot
 ```
 
 Hints go to stderr; JSON goes to stdout so you can copy or redirect:
@@ -51,8 +52,9 @@ pnpm mcp-config --copilot | pbcopy   # macOS clipboard
 | `--cursor` | `mcpServers` | `.cursor/mcp.json` or `~/.cursor/mcp.json` |
 | `--claude` | `mcpServers` | Claude Desktop config or project `.mcp.json` |
 | `--copilot` | `servers` (+ `"type": "stdio"`) | `.vscode/mcp.json` |
+| `--dev` | (mode) | Local `node` + absolute path to `dist/` instead of `npx` |
 
-Pass exactly one flag. Use `pnpm mcp-config --help` for usage.
+Pass exactly one client flag (`--cursor` | `--claude` | `--copilot`). Add `--dev` for local development. Use `pnpm mcp-config --help` for usage.
 
 ---
 
