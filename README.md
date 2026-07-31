@@ -27,6 +27,27 @@ pnpm test
 | `pnpm check-types` | Type-check all packages            |
 | `pnpm dev`         | Start dev watchers (where defined) |
 | `pnpm mcp-config --cursor` / `--claude` / `--copilot` | Print paste-ready MCP JSON (npm/`npx` by default; add `--dev` for local) |
+| `pnpm test:check-changeset` | Run pre-push changeset guard unit tests |
+
+## Git hooks (Husky)
+
+After `pnpm install`, Husky is enabled via the `prepare` script:
+
+- **`commit-msg`** — validates [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.)
+- **`pre-push`** — blocks push when versionable packages changed without a `.changeset/*.md` file
+
+Skip hooks when needed: `HUSKY=0 git push` or `SKIP_CHANGESET_CHECK=1 git push`.
+
+## Release flow
+
+Releases happen on **`main`** via [Changesets](https://github.com/changesets/changesets) and `.github/workflows/release.yml`:
+
+1. Add a changeset with `pnpm changeset` on your feature branch
+2. Merge PR into `main`
+3. CI opens a **Version Packages** PR — merge it
+4. CI publishes to npm (Trusted Publishing / OIDC)
+
+See [Versioning and Git workflow](./docs/versioning.md) and [npm publishing](./docs/npm-publish.md).
 
 ## Packages
 

@@ -6,13 +6,13 @@ This document covers manual setup for publishing `@aristeuroriz/mcp-katex-valida
 
 - npm account: [aristeuroriz](https://www.npmjs.com/~aristeuroriz)
 - GitHub repo: [aristeuroriz/falcon-mcp](https://github.com/aristeuroriz/falcon-mcp)
-- Workflow file: `.github/workflows/publish.yml`
+- Workflow file: `.github/workflows/release.yml`
 
 ## One-time manual steps
 
 ### 1. First local publish (creates the package on npm)
 
-Trusted Publisher is configured on an **existing** package. After this branch is merged and the package is publishable:
+Trusted Publisher is configured on an **existing** package:
 
 ```sh
 npm login
@@ -32,15 +32,21 @@ Complete 2FA/OTP when prompted. Do **not** enable Bypass 2FA for automation toke
 |-------|--------|
 | Organization or user | `aristeuroriz` |
 | Repository | `falcon-mcp` |
-| Workflow filename | `publish.yml` |
+| Workflow filename | `release.yml` |
 | Environment | (empty) |
 | Allowed actions | `npm publish` |
 
 4. Save
 
+If Trusted Publisher was previously pointed at `publish.yml`, update the workflow filename to `release.yml`.
+
 ### 3. Verify CI publish
 
-Merge to `main` (after version bump via Changesets) or run **Publish Package** workflow manually (`workflow_dispatch`).
+1. Merge a feature PR into `main` (with a pending changeset)
+2. CI opens a **Version Packages** PR — review and merge it
+3. CI runs again and publishes to npm
+
+Or trigger manually: **Actions → Release → Run workflow**.
 
 Check:
 
@@ -65,14 +71,20 @@ Package Settings → Publishing access → require 2FA and **disallow tokens**. 
 }
 ```
 
-For local development from this repo, keep using the absolute path to `packages/mcp-katex-validator/dist/index.js` (see [USING-MCP.md](../USING-MCP.md)).
+For local development from this repo, use `pnpm mcp-config --cursor --dev` (see [USING-MCP.md](../USING-MCP.md)).
 
 ## What CI does
 
-On push to `main`:
+On push to `main`, `.github/workflows/release.yml`:
 
 1. Builds the monorepo
 2. Strips any `_authToken` from `.npmrc` (so npm uses OIDC)
-3. Runs `pnpm changeset publish` for packages with unreleased versions
+3. Runs [`changesets/action`](https://github.com/changesets/action):
+   - **Pending changesets** → opens a Version Packages PR (`pnpm changeset version`)
+   - **No pending changesets** → `pnpm changeset publish` for unreleased versions
 
 No `NPM_TOKEN` secret is required for publish.
+
+## Local hooks
+
+Before push, Husky runs a changeset guard when versionable `packages/*` files changed (see [versioning.md](./versioning.md)). Skip once with `SKIP_CHANGESET_CHECK=1 git push` if needed.

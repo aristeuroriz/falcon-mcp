@@ -1,4 +1,4 @@
-name: Publish Package
+name: Release
 
 on:
   push:
@@ -7,11 +7,12 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: write
+  pull-requests: write
   id-token: write
-  contents: read
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,5 +48,12 @@ jobs:
             sed -i '/_authToken=/d' .npmrc
           fi
 
-      - name: Publish to npm
-        run: pnpm changeset publish
+      - name: Create release PR or publish
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm changeset publish
+          title: "chore: version packages"
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -15,11 +15,16 @@
     "tag-releases": "node scripts/tag-releases.mjs",
     "mcp-config": "node scripts/mcp-config.mjs",
     "test:mcp-config": "node --test tests/mcp-config.test.mjs",
+    "test:check-changeset": "node --test tests/check-changeset.test.mjs",
+    "prepare": "husky",
     "publish:katex:dry": "pnpm --filter @aristeuroriz/mcp-katex-validator publish --dry-run --access public --no-git-checks",
     "publish:katex": "pnpm --filter @aristeuroriz/mcp-katex-validator publish --access public"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "turbo": "^2.10.8",
     "typescript": "5.9.2"
