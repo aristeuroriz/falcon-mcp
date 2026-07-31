@@ -62,12 +62,9 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm changeset version
-          # Publish the package directory with npm (OIDC Trusted Publishing).
-          # Do not use pnpm publish here: it forwards --git-checks to npm 11 (EUNKNOWNCONFIG).
-          publish: bash -lc 'cd packages/mcp-katex-validator && npm publish --access public'
+          publish: node scripts/ci-publish.mjs
           title: "chore: version packages"
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Ensure setup-node token is not used; OIDC must be the only auth.
           NODE_AUTH_TOKEN: ""
