@@ -78,10 +78,15 @@ For local development from this repo, use `pnpm mcp-config --cursor --dev` (see 
 On push to `main`, `.github/workflows/release.yml`:
 
 1. Builds the monorepo
-2. Strips any `_authToken` from `.npmrc` (so npm uses OIDC)
-3. Runs [`changesets/action`](https://github.com/changesets/action):
+2. Runs tests (`pnpm test` + root script tests) — publish is blocked if they fail
+3. Strips any `_authToken` from `.npmrc` (so npm uses OIDC)
+4. Runs [`changesets/action`](https://github.com/changesets/action):
    - **Pending changesets** → opens a Version Packages PR (`pnpm changeset version`)
    - **No pending changesets** → `pnpm changeset publish` for unreleased versions
+
+Pull requests and pushes to `main` also run `.github/workflows/ci.yml` (build, lint, type-check, test).
+
+Husky is disabled in these jobs (`HUSKY=0`) so the Version Packages push is not blocked by the local pre-push changeset guard. The guard also skips automatically when `CI=true`.
 
 No `NPM_TOKEN` secret is required for publish.
 

@@ -43,8 +43,8 @@ Skip hooks when needed: `HUSKY=0 git push` or `SKIP_CHANGESET_CHECK=1 git push`.
 Releases happen on **`main`** via [Changesets](https://github.com/changesets/changesets) and `.github/workflows/release.yml`:
 
 1. Add a changeset with `pnpm changeset` on your feature branch
-2. Merge PR into `main`
-3. CI opens a **Version Packages** PR — merge it
+2. Merge PR into `main` (CI runs build, lint, type-check, and tests on every PR)
+3. Release workflow builds, re-runs tests, then opens a **Version Packages** PR — merge it
 4. CI publishes to npm (Trusted Publishing / OIDC)
 
 See [Versioning and Git workflow](./docs/versioning.md) and [npm publishing](./docs/npm-publish.md).
