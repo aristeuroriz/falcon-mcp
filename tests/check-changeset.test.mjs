@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { describe, it, after } from "node:test";
 import {
   checkChangesetRequired,
   getVersionablePackageDirs,
@@ -40,8 +43,30 @@ describe("getVersionablePackageDirs", () => {
 });
 
 describe("hasPendingChangeset", () => {
+  const fixtureRoot = mkdtempSync(path.join(tmpdir(), "changeset-check-"));
+
+  after(() => {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  });
+
   it("returns true when a changeset markdown file exists", () => {
-    const repoRoot = new URL("..", import.meta.url).pathname;
-    assert.equal(hasPendingChangeset(repoRoot), true);
+    const changesetDir = path.join(fixtureRoot, ".changeset");
+    mkdirSync(changesetDir, { recursive: true });
+    writeFileSync(path.join(changesetDir, "README.md"), "# changesets\n");
+    writeFileSync(path.join(changesetDir, "example.md"), "---\n---\n\nsummary\n");
+
+    assert.equal(hasPendingChangeset(fixtureRoot), true);
+  });
+
+  it("returns false when only README.md is present", () => {
+    const emptyRoot = mkdtempSync(path.join(tmpdir(), "changeset-empty-"));
+    try {
+      const changesetDir = path.join(emptyRoot, ".changeset");
+      mkdirSync(changesetDir, { recursive: true });
+      writeFileSync(path.join(changesetDir, "README.md"), "# changesets\n");
+      assert.equal(hasPendingChangeset(emptyRoot), false);
+    } finally {
+      rmSync(emptyRoot, { recursive: true, force: true });
+    }
   });
 });
