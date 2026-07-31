@@ -14,6 +14,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,6 +40,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: |
+          pnpm test
+          pnpm test:mcp-config
+          pnpm test:check-changeset
 
       - name: Strip registry auth token for OIDC publish
         run: |

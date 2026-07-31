@@ -113,6 +113,8 @@ export function checkChangesetRequired(repoRoot, options = {}) {
 
 function main() {
   const skip =
+    process.env.CI === "true" ||
+    process.env.HUSKY === "0" ||
     process.env.SKIP_CHANGESET_CHECK === "1" ||
     process.env.SKIP_CHANGESET_CHECK === "true";
 

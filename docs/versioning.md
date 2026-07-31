@@ -116,13 +116,16 @@ HUSKY=0 git push                    # skip all Husky hooks
 SKIP_CHANGESET_CHECK=1 git push     # skip only the changeset check
 ```
 
+In CI (`CI=true`) or when `HUSKY=0`, the pre-push changeset check is skipped automatically (so `changesets/action` can push the Version Packages branch).
+
 ### 5. Merge to `main`
 
-After merge, `.github/workflows/release.yml` runs on `main`:
+After merge, `.github/workflows/ci.yml` runs build/lint/type-check/tests. Separately, `.github/workflows/release.yml` runs on `main`:
 
-1. If pending changesets exist → opens a **Version Packages** PR (`chore: version packages`)
-2. Review and merge that PR
-3. On the next run, with no pending changesets → `pnpm changeset publish` to npm (OIDC)
+1. Build + tests again (publish is blocked if they fail)
+2. If pending changesets exist → opens a **Version Packages** PR (`chore: version packages`)
+3. Review and merge that PR
+4. On the next run, with no pending changesets → `pnpm changeset publish` to npm (OIDC)
 
 ### 6. Hotfixes
 
