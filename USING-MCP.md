@@ -89,7 +89,7 @@ Project config overrides global when both define the same server name.
 1. Save the file.
 2. Open **Cursor Settings → Tools & MCP** (or restart Cursor).
 3. Confirm `mcp-katex-validator` shows as connected.
-4. In Agent chat, ask it to validate a KaTeX expression (for example `x^2 + y^2`).
+4. In Agent chat, ask it to validate KaTeX expressions in batch (for example `["x^2 + y^2", "\\frac{a}{b}"]`).
 
 Official docs: [Cursor MCP](https://cursor.com/docs/mcp).
 
