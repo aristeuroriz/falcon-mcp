@@ -1,0 +1,51 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Upgrade npm for Trusted Publishing
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Strip registry auth token for OIDC publish
+        run: |
+          if [ -f "$HOME/.npmrc" ]; then
+            sed -i '/_authToken=/d' "$HOME/.npmrc"
+          fi
+          if [ -f .npmrc ]; then
+            sed -i '/_authToken=/d' .npmrc
+          fi
+
+      - name: Publish to npm
+        run: pnpm changeset publish

@@ -11,7 +11,7 @@
     "check-types": "turbo run check-types",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && pnpm tag-releases && git push --tags",
+    "release": "pnpm build && pnpm changeset publish",
     "tag-releases": "node scripts/tag-releases.mjs",
     "mcp-config": "node scripts/mcp-config.mjs",
     "test:mcp-config": "node --test tests/mcp-config.test.mjs"

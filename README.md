@@ -32,7 +32,7 @@ pnpm test
 
 | Package                                                             | Type       | Description                             |
 | ------------------------------------------------------------------- | ---------- | --------------------------------------- |
-| `[@falcon-mcp/mcp-katex-validator](./packages/mcp-katex-validator)` | MCP server | Validates KaTeX/LaTeX expression syntax |
+| `[@aristeuroriz/mcp-katex-validator](./packages/mcp-katex-validator)` | MCP server | Validates KaTeX/LaTeX expression syntax (published on npm) |
 | `[@falcon-mcp/shared](./packages/shared)`                           | Library    | Shared TypeScript utilities             |
 | `[@falcon-mcp/typescript-config](./packages/typescript-config)`     | Config     | Shared TypeScript config (Node)         |
 | `[@falcon-mcp/eslint-config](./packages/eslint-config)`             | Config     | Shared ESLint flat config               |
@@ -44,6 +44,7 @@ MCP server packages use the `mcp-*` prefix in both folder and package name.
 See the [documentation hub](./docs/README.md) for package implementation guides and conventions.
 
 - [Using MCP servers in Cursor, VS Code, and Claude](./USING-MCP.md) (includes `pnpm mcp-config`)
+- [npm publishing (Trusted Publishing)](./docs/npm-publish.md)
 - [Versioning and Git workflow](./docs/versioning.md)
 
 ## License

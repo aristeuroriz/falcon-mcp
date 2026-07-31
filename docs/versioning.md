@@ -6,8 +6,8 @@ This document describes how versioning and branching work in the `falcon-mcp` mo
 
 - **Versioning tool:** [Changesets](https://github.com/changesets/changesets)
 - **Branching model:** Simplified Gitflow (`main` + `develop` + short-lived feature/release branches)
-- **Tagging:** One git tag per package release (`@falcon-mcp/<package-name>@<version>`), not a single monorepo-wide tag
-- **Publishing:** None — packages are private and consumed locally via absolute path, not published to npm
+- **Tagging:** One git tag per package release (`@aristeuroriz/<package-name>@<version>` for published MCP servers), not a single monorepo-wide tag
+- **Publishing:** `@aristeuroriz/mcp-katex-validator` is published publicly to npm via GitHub Actions [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) (see [npm-publish.md](./npm-publish.md)). Other packages remain private workspace packages.
 - **Ignored by Changesets:** `@falcon-mcp/eslint-config` and `@falcon-mcp/typescript-config` (tooling only; not product releases)
 - **Changesets base branch:** `develop` (use `pnpm changeset status` on feature PRs; it compares against `develop`)
 
@@ -69,7 +69,7 @@ It generates a markdown file in `.changeset/`, e.g. `.changeset/silly-lions-jump
 
 ```markdown
 ---
-"@falcon-mcp/mcp-katex-validator": minor
+"@aristeuroriz/mcp-katex-validator": minor
 ---
 
 Add strict mode support to catch KaTeX deprecation warnings as errors
@@ -109,16 +109,18 @@ git commit -m "chore: version packages"
 git push
 ```
 
-Open a PR from `develop` into `main`. Review the version bumps and changelogs in the diff. Once merged:
+Open a PR from `develop` into `main`. Review the version bumps and changelogs in the diff. Once merged, the **Publish Package** GitHub Actions workflow on `main` builds and runs `pnpm changeset publish` to npm (OIDC Trusted Publishing — no `NPM_TOKEN` required).
+
+For local verification before merge:
 
 ```bash
 git checkout main
 git pull
-
-pnpm release   # build + tag each changed package + push tags
+pnpm build
+pnpm changeset publish   # requires npm login; use only for debugging
 ```
 
-`pnpm release` builds the monorepo, then runs `scripts/tag-releases.mjs`, which creates a git tag only for packages whose `version` changed in `HEAD` compared to `HEAD^` (e.g. `@falcon-mcp/mcp-katex-validator@1.3.0`). Tooling packages listed in Changesets `ignore` are skipped. Existing tags are not recreated.
+`changeset publish` publishes only non-private packages whose versions are not yet on npm. Git tags are created by Changesets during publish.
 
 ### 6. Hotfixes
 
@@ -185,7 +187,7 @@ pnpm changeset                    # record an intended version bump
 # Releasing (on develop, then merge to main)
 pnpm changeset version            # apply bumps + changelogs
 git add -A && git commit -m "chore: version packages"
-pnpm release                      # build, tag only bumped packages, push tags
+# merge develop → main; CI publishes via .github/workflows/publish.yml
 
 # Check for missing changesets before merging into develop
 pnpm changeset status

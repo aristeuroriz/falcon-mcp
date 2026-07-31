@@ -19,13 +19,13 @@ pnpm build
 packages/mcp-katex-validator/dist/index.js
 ```
 
-3. Use **Node.js >= 20**. Client configs should use an **absolute path** to `dist/index.js` (relative paths often fail depending on the client's cwd).
+3. Use **Node.js >= 20**. For development from this repo, use an **absolute path** to `dist/index.js`. For published installs, use `npx -y @aristeuroriz/mcp-katex-validator` (see [npm publishing](./docs/npm-publish.md)).
 
 ## Available servers
 
 | Server id | Package | Entrypoint | Tool(s) |
 |-----------|---------|------------|---------|
-| `mcp-katex-validator` | `@falcon-mcp/mcp-katex-validator` | `packages/mcp-katex-validator/dist/index.js` | `validate_katex` |
+| `mcp-katex-validator` | `@aristeuroriz/mcp-katex-validator` | `packages/mcp-katex-validator/dist/index.js` or `npx -y @aristeuroriz/mcp-katex-validator` | `validate_katex` |
 
 See [docs/packages/mcp-katex-validator.md](./docs/packages/mcp-katex-validator.md) for the tool contract.
 
@@ -212,7 +212,22 @@ pnpm install
 pnpm build
 ```
 
-Then restart the client (or reload MCP servers) so it spawns the new `dist/index.js`. If the entrypoint path did not change, no config edit is required.
+Then restart the client (or reload MCP servers) so it spawns the new build. If using a local path, no config edit is required when only the code changes. If using `npx`, the next client restart pulls the latest published version.
+
+## Published package (npm)
+
+After [npm publish setup](./docs/npm-publish.md), you can run the server without cloning this repo:
+
+```json
+{
+  "mcpServers": {
+    "mcp-katex-validator": {
+      "command": "npx",
+      "args": ["-y", "@aristeuroriz/mcp-katex-validator"]
+    }
+  }
+}
+```
 
 ---
 

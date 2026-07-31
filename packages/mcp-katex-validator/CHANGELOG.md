@@ -1,4 +1,4 @@
-# @falcon-mcp/mcp-katex-validator
+# @aristeuroriz/mcp-katex-validator
 
 ## 3.0.0
 
