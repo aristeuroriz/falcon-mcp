@@ -1,0 +1,43 @@
+{
+  "name": "@falcon-mcp/mcp-katex-validator",
+  "version": "1.0.0",
+  "description": "MCP server that validates KaTeX/LaTeX expression syntax",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "mcp-katex-validator": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./validate": "./dist/validate.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "check-types": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint --config ../eslint-config/base.js .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "katex": "^0.16.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@falcon-mcp/eslint-config": "workspace:*",
+    "@falcon-mcp/typescript-config": "workspace:*",
+    "@types/node": "^22.15.0",
+    "eslint": "^9.39.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.0"
+  }
+}

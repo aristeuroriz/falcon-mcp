@@ -1,0 +1,29 @@
+{
+  "name": "@falcon-mcp/shared",
+  "version": "0.0.0",
+  "description": "Shared TypeScript utilities for falcon-mcp packages",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint --config ../eslint-config/base.js ."
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@falcon-mcp/eslint-config": "workspace:*",
+    "@falcon-mcp/typescript-config": "workspace:*",
+    "@types/node": "^22.15.0",
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.2"
+  }
+}

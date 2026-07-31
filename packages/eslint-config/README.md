@@ -1,3 +1,9 @@
-# `@turbo/eslint-config`
+# `@falcon-mcp/eslint-config`
 
-Collection of internal eslint configurations.
+Shared ESLint flat config for Node.js MCP packages.
+
+```js
+import { config } from "@falcon-mcp/eslint-config/base";
+
+export default config;
+```
