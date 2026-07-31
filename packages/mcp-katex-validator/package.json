@@ -1,6 +1,6 @@
 {
   "name": "@falcon-mcp/mcp-katex-validator",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "MCP server that validates KaTeX/LaTeX expression syntax",
   "type": "module",
   "private": true,
