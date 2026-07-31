@@ -1,6 +1,6 @@
 {
   "name": "@falcon-mcp/mcp-katex-validator",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "MCP server that validates KaTeX/LaTeX expression syntax",
   "type": "module",
   "private": true,
@@ -10,7 +10,8 @@
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./validate": "./dist/validate.js"
+    "./validate": "./dist/validate.js",
+    "./schemas": "./dist/schemas.js"
   },
   "files": [
     "dist"
