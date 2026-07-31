@@ -27,7 +27,8 @@
     "./schemas": "./dist/schemas.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc && chmod +x dist/index.js",
