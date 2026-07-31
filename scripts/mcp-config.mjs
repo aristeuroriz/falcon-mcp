@@ -28,7 +28,7 @@ const REPO_ROOT = path.resolve(__dirname, "..");
 /**
  * Discover MCP server packages under packages/mcp-*.
  * @param {string} repoRoot
- * @returns {{ id: string; entry: string }[]}
+ * @returns {{ id: string; entry: string; packageName: string }[]}
  */
 export function discoverMcpServers(repoRoot) {
   const packagesDir = path.join(repoRoot, "packages");
@@ -51,7 +51,11 @@ export function discoverMcpServers(repoRoot) {
       const relativeEntry = binEntry ?? "./dist/index.js";
       const entry = path.resolve(pkgDir, relativeEntry);
 
-      return { id: d.name, entry };
+      return {
+        id: d.name,
+        entry,
+        packageName: typeof pkg.name === "string" ? pkg.name : d.name,
+      };
     })
     .filter(Boolean)
     .sort((a, b) => a.id.localeCompare(b.id));
@@ -60,22 +64,30 @@ export function discoverMcpServers(repoRoot) {
 /**
  * Build client-specific MCP config JSON object.
  * @param {"cursor"|"claude"|"copilot"} client
- * @param {{ id: string; entry: string }[]} servers
+ * @param {{ id: string; entry: string; packageName?: string }[]} servers
+ * @param {{ dev?: boolean }} [options]
  */
-export function buildMcpConfig(client, servers) {
+export function buildMcpConfig(client, servers, options = {}) {
   const profile = CLIENTS[client];
   if (!profile) {
     throw new Error(`Unknown client: ${client}`);
   }
 
+  const dev = options.dev === true;
+
   /** @type {Record<string, object>} */
   const entries = {};
   for (const server of servers) {
     /** @type {Record<string, unknown>} */
-    const block = {
-      command: "node",
-      args: [server.entry],
-    };
+    const block = dev
+      ? {
+          command: "node",
+          args: [server.entry],
+        }
+      : {
+          command: "npx",
+          args: ["-y", server.packageName ?? server.id],
+        };
     if (profile.includeType) {
       block.type = "stdio";
     }
@@ -87,12 +99,12 @@ export function buildMcpConfig(client, servers) {
 
 /**
  * @param {string[]} argv
- * @returns {{ client: "cursor"|"claude"|"copilot"; help: boolean }}
+ * @returns {{ client: "cursor"|"claude"|"copilot"; help: boolean; dev: boolean }}
  */
 export function parseArgs(argv) {
   const flags = argv.filter((a) => a.startsWith("--"));
   if (flags.includes("--help") || flags.includes("-h")) {
-    return { client: "cursor", help: true };
+    return { client: "cursor", help: true, dev: false };
   }
 
   const selected = /** @type {("cursor"|"claude"|"copilot")[]} */ (
@@ -107,7 +119,11 @@ export function parseArgs(argv) {
     );
   }
 
-  return { client: selected[0], help: false };
+  return {
+    client: selected[0],
+    help: false,
+    dev: flags.includes("--dev"),
+  };
 }
 
 export function printHelp() {
@@ -115,9 +131,13 @@ export function printHelp() {
   pnpm mcp-config --cursor
   pnpm mcp-config --claude
   pnpm mcp-config --copilot
+  pnpm mcp-config --cursor --dev
 
 Prints a ready-to-paste MCP JSON config for the chosen client.
-Paths are absolute to this repository's built packages.
+
+Modes:
+  (default)  Use published npm packages via npx -y <package>
+  --dev      Use local built packages (absolute path to dist/)
 
 Paste targets:
   --cursor   ${CLIENTS.cursor.where}
@@ -147,18 +167,22 @@ function main() {
     process.exit(1);
   }
 
-  const missing = servers.filter((s) => !existsSync(s.entry));
-  if (missing.length > 0) {
-    console.error(
-      "Warning: entrypoint missing (run pnpm build first):\n" +
-        missing.map((s) => `  - ${s.entry}`).join("\n"),
-    );
+  if (parsed.dev) {
+    const missing = servers.filter((s) => !existsSync(s.entry));
+    if (missing.length > 0) {
+      console.error(
+        "Warning: entrypoint missing (run pnpm build first):\n" +
+          missing.map((s) => `  - ${s.entry}`).join("\n"),
+      );
+    }
   }
 
-  const config = buildMcpConfig(parsed.client, servers);
+  const config = buildMcpConfig(parsed.client, servers, { dev: parsed.dev });
   const where = CLIENTS[parsed.client].where;
+  const mode = parsed.dev ? "dev (local dist)" : "npm (npx)";
 
   console.error(`# Client: ${parsed.client}`);
+  console.error(`# Mode: ${mode}`);
   console.error(`# Paste into: ${where}`);
   console.error(`# Servers: ${servers.map((s) => s.id).join(", ")}`);
   console.error("");

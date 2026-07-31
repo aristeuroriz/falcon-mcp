@@ -19,13 +19,13 @@ pnpm build
 packages/mcp-katex-validator/dist/index.js
 ```
 
-3. Use **Node.js >= 20**. Client configs should use an **absolute path** to `dist/index.js` (relative paths often fail depending on the client's cwd).
+3. Use **Node.js >= 20**. For development from this repo, use an **absolute path** to `dist/index.js`. For published installs, use `npx -y @aristeuroriz/mcp-katex-validator` (see [npm publishing](./docs/npm-publish.md)).
 
 ## Available servers
 
 | Server id | Package | Entrypoint | Tool(s) |
 |-----------|---------|------------|---------|
-| `mcp-katex-validator` | `@falcon-mcp/mcp-katex-validator` | `packages/mcp-katex-validator/dist/index.js` | `validate_katex` |
+| `mcp-katex-validator` | `@aristeuroriz/mcp-katex-validator` | `packages/mcp-katex-validator/dist/index.js` or `npx -y @aristeuroriz/mcp-katex-validator` | `validate_katex` |
 
 See [docs/packages/mcp-katex-validator.md](./docs/packages/mcp-katex-validator.md) for the tool contract.
 
@@ -34,9 +34,10 @@ See [docs/packages/mcp-katex-validator.md](./docs/packages/mcp-katex-validator.m
 From the repository root, print a ready-to-paste config for your client. The script discovers every `packages/mcp-*` server and fills in absolute paths:
 
 ```sh
-pnpm mcp-config --cursor    # Cursor (.cursor/mcp.json)
-pnpm mcp-config --claude    # Claude Desktop / Claude Code
-pnpm mcp-config --copilot   # VS Code GitHub Copilot (.vscode/mcp.json)
+pnpm mcp-config --cursor          # npm (npx) — published package
+pnpm mcp-config --cursor --dev    # local dist (absolute path)
+pnpm mcp-config --claude
+pnpm mcp-config --copilot
 ```
 
 Hints go to stderr; JSON goes to stdout so you can copy or redirect:
@@ -51,8 +52,9 @@ pnpm mcp-config --copilot | pbcopy   # macOS clipboard
 | `--cursor` | `mcpServers` | `.cursor/mcp.json` or `~/.cursor/mcp.json` |
 | `--claude` | `mcpServers` | Claude Desktop config or project `.mcp.json` |
 | `--copilot` | `servers` (+ `"type": "stdio"`) | `.vscode/mcp.json` |
+| `--dev` | (mode) | Local `node` + absolute path to `dist/` instead of `npx` |
 
-Pass exactly one flag. Use `pnpm mcp-config --help` for usage.
+Pass exactly one client flag (`--cursor` | `--claude` | `--copilot`). Add `--dev` for local development. Use `pnpm mcp-config --help` for usage.
 
 ---
 
@@ -212,7 +214,22 @@ pnpm install
 pnpm build
 ```
 
-Then restart the client (or reload MCP servers) so it spawns the new `dist/index.js`. If the entrypoint path did not change, no config edit is required.
+Then restart the client (or reload MCP servers) so it spawns the new build. If using a local path, no config edit is required when only the code changes. If using `npx`, the next client restart pulls the latest published version.
+
+## Published package (npm)
+
+After [npm publish setup](./docs/npm-publish.md), you can run the server without cloning this repo:
+
+```json
+{
+  "mcpServers": {
+    "mcp-katex-validator": {
+      "command": "npx",
+      "args": ["-y", "@aristeuroriz/mcp-katex-validator"]
+    }
+  }
+}
+```
 
 ---
 

@@ -4,15 +4,11 @@
   "commit": false,
   "fixed": [],
   "linked": [],
-  "access": "restricted",
-  "baseBranch": "develop",
+  "access": "public",
+  "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
     "@falcon-mcp/eslint-config",
     "@falcon-mcp/typescript-config"
-  ],
-  "privatePackages": {
-    "version": true,
-    "tag": true
-  }
+  ]
 }

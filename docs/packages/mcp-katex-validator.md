@@ -2,7 +2,7 @@
 
 MCP server that validates KaTeX/LaTeX expression syntax over stdio.
 
-- **Package:** `@falcon-mcp/mcp-katex-validator`
+- **Package:** `@aristeuroriz/mcp-katex-validator`
 - **Folder:** `packages/mcp-katex-validator`
 - **Binary:** `mcp-katex-validator`
 - **Transport:** stdio (Model Context Protocol)
@@ -92,12 +92,29 @@ Each failure includes a 0-based `index` matching the input array position. When 
 ## Build and test
 
 ```sh
-pnpm --filter @falcon-mcp/mcp-katex-validator build
-pnpm --filter @falcon-mcp/mcp-katex-validator test
-pnpm --filter @falcon-mcp/mcp-katex-validator dev
+pnpm --filter @aristeuroriz/mcp-katex-validator build
+pnpm --filter @aristeuroriz/mcp-katex-validator test
+pnpm --filter @aristeuroriz/mcp-katex-validator dev
 ```
 
 ## MCP client configuration
+
+### From npm (published)
+
+```json
+{
+  "mcpServers": {
+    "mcp-katex-validator": {
+      "command": "npx",
+      "args": ["-y", "@aristeuroriz/mcp-katex-validator"]
+    }
+  }
+}
+```
+
+See [npm publishing](../npm-publish.md) for Trusted Publishing setup.
+
+### From this repo (development)
 
 Example Cursor / Claude Desktop config:
 
@@ -115,5 +132,5 @@ Example Cursor / Claude Desktop config:
 After building, you can also run the binary directly:
 
 ```sh
-pnpm --filter @falcon-mcp/mcp-katex-validator exec mcp-katex-validator
+pnpm --filter @aristeuroriz/mcp-katex-validator exec mcp-katex-validator
 ```

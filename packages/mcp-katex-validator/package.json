@@ -1,9 +1,22 @@
 {
-  "name": "@falcon-mcp/mcp-katex-validator",
+  "name": "@aristeuroriz/mcp-katex-validator",
   "version": "3.0.0",
   "description": "MCP server that validates KaTeX/LaTeX expression syntax",
   "type": "module",
-  "private": true,
+  "license": "MIT",
+  "author": "Aristeu Roriz Neto <aristeuroriz@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aristeuroriz/falcon-mcp.git",
+    "directory": "packages/mcp-katex-validator"
+  },
+  "homepage": "https://github.com/aristeuroriz/falcon-mcp/tree/main/packages/mcp-katex-validator",
+  "bugs": {
+    "url": "https://github.com/aristeuroriz/falcon-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "mcp-katex-validator": "./dist/index.js"
   },
