@@ -1,5 +1,11 @@
 # @aristeuroriz/mcp-katex-validator
 
+## 3.0.2
+
+### Patch Changes
+
+- 4fb55a7: Add npm package README with install, MCP client setup, and tool usage.
+
 ## 3.0.1
 
 ### Patch Changes
