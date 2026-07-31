@@ -120,7 +120,7 @@ In CI (`CI=true`) or when `HUSKY=0`, the pre-push changeset check is skipped aut
 
 ### 5. Merge to `main`
 
-After merge, `.github/workflows/ci.yml` runs build/lint/type-check/tests. Separately, `.github/workflows/release.yml` runs on `main`:
+After merge, `.github/workflows/release.yml` runs on `main` (CI already validated the PR via `.github/workflows/ci.yml`):
 
 1. Build + tests again (publish is blocked if they fail)
 2. If pending changesets exist → opens a **Version Packages** PR (`chore: version packages`)

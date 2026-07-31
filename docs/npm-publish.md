@@ -84,7 +84,7 @@ On push to `main`, `.github/workflows/release.yml`:
    - **Pending changesets** → opens a Version Packages PR (`pnpm changeset version`)
    - **No pending changesets** → `pnpm changeset publish` for unreleased versions
 
-Pull requests and pushes to `main` also run `.github/workflows/ci.yml` (build, lint, type-check, test).
+Pull requests targeting `main` run `.github/workflows/ci.yml` (build, lint, type-check, test). After merge, only `.github/workflows/release.yml` runs on `main` (build, test, then version/publish).
 
 Husky is disabled in these jobs (`HUSKY=0`) so the Version Packages push is not blocked by the local pre-push changeset guard. The guard also skips automatically when `CI=true`.
 
