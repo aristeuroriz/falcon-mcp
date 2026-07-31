@@ -66,9 +66,9 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm changeset version
-          # Use npm publish (not pnpm) so --git-checks is not forwarded to npm 11+.
-          # OIDC Trusted Publishing requires a recent npm (installed above).
-          publish: npm publish packages/mcp-katex-validator --access public
+          # Use npm publish from the package dir (OIDC). Avoid `npm publish <path>`
+          # which npm 11 may treat as a git package specifier (EALLOWGIT).
+          publish: npm --prefix packages/mcp-katex-validator publish --access public
           title: "chore: version packages"
           commit: "chore: version packages"
         env:
